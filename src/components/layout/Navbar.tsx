@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Search, MapPin, ShoppingCart, Menu, User, ChevronDown, Heart, Package, Zap, X, ShieldCheck } from 'lucide-react';
+import { Search, MapPin, ShoppingCart, Menu, User, ChevronDown, Heart, Package, Zap, X, ShieldCheck, Settings } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useCart } from '../../context/CartContext';
 import { CATEGORIES } from '../../data/categories';
-import { PRODUCTS } from '../../data/products';
+import { useAdmin } from '../../context/AdminContext';
 import type { Product } from '../../types';
 
 interface NavbarProps {
@@ -15,6 +15,7 @@ interface NavbarProps {
 export const Navbar: React.FC<NavbarProps> = ({ onOpenMegaMenu, onNavigate }) => {
   const { user, selectedAddress, addresses, selectAddress, togglePrimeMembership } = useAuth();
   const { itemCount, openCartDrawer } = useCart();
+  const { products } = useAdmin();
 
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
@@ -32,7 +33,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenMegaMenu, onNavigate }) =>
       return;
     }
     const query = searchQuery.toLowerCase();
-    const matches = PRODUCTS.filter(
+    const matches = products.filter(
       (p) =>
         (selectedCategory === 'All' || p.category === selectedCategory) &&
         (p.title.toLowerCase().includes(query) ||
@@ -40,7 +41,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenMegaMenu, onNavigate }) =>
           p.subCategory.toLowerCase().includes(query))
     ).slice(0, 6);
     setSuggestions(matches);
-  }, [searchQuery, selectedCategory]);
+  }, [searchQuery, selectedCategory, products]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -359,6 +360,29 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenMegaMenu, onNavigate }) =>
           >
             <span style={{ fontSize: '0.72rem', color: '#c9d1d9' }}>Returns</span>
             <span style={{ fontSize: '0.88rem', fontWeight: 700, color: '#fff' }}>& Orders</span>
+          </div>
+
+          {/* Admin Portal Toggle Button */}
+          <div
+            onClick={() => onNavigate('/admin')}
+            style={{
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              padding: '6px 12px',
+              borderRadius: '6px',
+              backgroundColor: 'rgba(255, 153, 0, 0.15)',
+              border: '1px solid #ff9900',
+              transition: 'all 0.2s',
+            }}
+            title="Open Store Management & Inventory Portal"
+          >
+            <Settings size={16} color="#ff9900" />
+            <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1.1 }}>
+              <span style={{ fontSize: '0.68rem', color: '#ff9900', fontWeight: 800, textTransform: 'uppercase' }}>Store Suite</span>
+              <span style={{ fontSize: '0.82rem', fontWeight: 800, color: '#fff' }}>Admin Portal ⚙️</span>
+            </div>
           </div>
 
           {/* Shopping Cart Button */}

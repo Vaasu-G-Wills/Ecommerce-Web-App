@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { PRODUCTS } from '../data/products';
+import { useAdmin } from '../context/AdminContext';
 import type { ConfigOption } from '../types';
 import { ImageGallery } from '../components/product/ImageGallery';
 import { ConfigSelector } from '../components/product/ConfigSelector';
@@ -20,7 +20,8 @@ interface ProductDetailPageProps {
 
 export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ productId, onNavigate }) => {
   const { addToCart } = useCart();
-  const product = PRODUCTS.find((p) => p.id === productId);
+  const { products } = useAdmin();
+  const product = products.find((p) => p.id === productId);
 
   const [selectedConfigs, setSelectedConfigs] = useState<ConfigOption[]>(() => {
     if (!product || !product.configurations) return [];
@@ -53,7 +54,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ productId,
   }
 
   // Frequently Bought Together Bundle calculation
-  const relatedBundleProduct = PRODUCTS.find((p) => p.id !== product.id && p.category === product.category) || PRODUCTS[0];
+  const relatedBundleProduct = products.find((p) => p.id !== product.id && p.category === product.category) || products[0];
   const bundleTotal = dynamicUnitPrice + relatedBundleProduct.price;
 
   const handleAddBundleToCart = () => {
@@ -176,7 +177,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ productId,
       {/* Related Products Carousel */}
       <ProductCarousel
         title={`More high-performance gear from ${product.brand}`}
-        products={PRODUCTS.filter((p) => p.brand === product.brand && p.id !== product.id)}
+        products={products.filter((p) => p.brand === product.brand && p.id !== product.id)}
         onNavigate={onNavigate}
       />
     </div>

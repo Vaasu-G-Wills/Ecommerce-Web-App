@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import type { FilterState } from '../types';
-import { PRODUCTS } from '../data/products';
+import { useAdmin } from '../context/AdminContext';
 import { FilterSidebar } from '../components/search/FilterSidebar';
 import { SortAndBar } from '../components/search/SortAndBar';
 import { ProductCard } from '../components/product/ProductCard';
@@ -25,6 +25,8 @@ const DEFAULT_FILTERS: FilterState = {
 };
 
 export const SearchPage: React.FC<SearchPageProps> = ({ queryParams, onNavigate }) => {
+  const { products } = useAdmin();
+
   const [filterState, setFilterState] = useState<FilterState>({
     ...DEFAULT_FILTERS,
     searchQuery: queryParams.q || '',
@@ -56,7 +58,7 @@ export const SearchPage: React.FC<SearchPageProps> = ({ queryParams, onNavigate 
   };
 
   const filteredAndSortedProducts = useMemo(() => {
-    let result = [...PRODUCTS];
+    let result = [...products];
 
     // 1. Search query
     if (filterState.searchQuery.trim()) {
@@ -122,7 +124,7 @@ export const SearchPage: React.FC<SearchPageProps> = ({ queryParams, onNavigate 
     });
 
     return result;
-  }, [filterState]);
+  }, [filterState, products]);
 
   return (
     <div style={{ maxWidth: '1440px', margin: '2rem auto', padding: '0 1.5rem' }}>

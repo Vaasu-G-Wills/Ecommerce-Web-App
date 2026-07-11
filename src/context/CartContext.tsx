@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import type { CartItem, ConfigOption, Coupon, Product, SavedForLaterItem } from '../types';
-import { AVAILABLE_COUPONS } from '../data/categories';
 import { useAuth } from './AuthContext';
+import { useAdmin } from './AdminContext';
 
 interface ToastMessage {
   id: string;
@@ -44,6 +44,7 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { user } = useAuth();
+  const { coupons } = useAdmin();
   
   const [cartItems, setCartItems] = useState<CartItem[]>(() => {
     const saved = localStorage.getItem('primetech_cart');
@@ -170,10 +171,10 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const applyCoupon = (code: string): boolean => {
     setCouponError(null);
     const cleanCode = code.trim().toUpperCase();
-    const found = AVAILABLE_COUPONS.find((c) => c.code === cleanCode);
+    const found = coupons.find((c) => c.code.toUpperCase() === cleanCode);
 
     if (!found) {
-      setCouponError('Invalid coupon code. Try TECHPRO10 or PRIME2026.');
+      setCouponError('Invalid coupon code. Check active codes in Admin Portal or try TECHPRO10.');
       return false;
     }
 

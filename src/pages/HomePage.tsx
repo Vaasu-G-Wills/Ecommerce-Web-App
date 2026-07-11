@@ -3,15 +3,16 @@ import { HeroCarousel } from '../components/home/HeroCarousel';
 import { LightningDeals } from '../components/home/LightningDeals';
 import { CategoryGrid } from '../components/home/CategoryGrid';
 import { ProductCarousel } from '../components/home/ProductCarousel';
-import { PRODUCTS } from '../data/products';
+import { useAdmin } from '../context/AdminContext';
 import { ShieldCheck, Truck, RotateCcw, CreditCard } from 'lucide-react';
 
 export const HomePage: React.FC<{ onNavigate: (path: string, queryParams?: Record<string, string>) => void }> = ({
   onNavigate,
 }) => {
-  const bestSellers = PRODUCTS.filter((p) => p.isBestSeller || p.rating >= 4.8);
-  const newArrivals = [...PRODUCTS].sort((a, b) => b.price - a.price).slice(0, 8);
-  const gamingGear = PRODUCTS.filter((p) => p.category === 'peripherals' || p.category === 'monitors');
+  const { products } = useAdmin();
+  const bestSellers = products.filter((p) => p.isBestSeller || p.rating >= 4.8);
+  const newArrivals = [...products].sort((a, b) => b.price - a.price).slice(0, 8);
+  const gamingGear = products.filter((p) => p.category === 'peripherals' || p.category === 'monitors');
 
   return (
     <div>

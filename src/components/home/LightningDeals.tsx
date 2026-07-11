@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Zap, Clock, ShoppingBag } from 'lucide-react';
-import { PRODUCTS } from '../../data/products';
+import { useAdmin } from '../../context/AdminContext';
 import { useCart } from '../../context/CartContext';
 import { PriceDisplay } from '../common/PriceDisplay';
 import { StarRating } from '../common/StarRating';
 
 export const LightningDeals: React.FC<{ onNavigate: (path: string) => void }> = ({ onNavigate }) => {
   const { addToCart } = useCart();
+  const { products } = useAdmin();
   const [timeLeft, setTimeLeft] = useState({ hours: 4, minutes: 12, seconds: 38 });
 
   useEffect(() => {
@@ -21,7 +22,7 @@ export const LightningDeals: React.FC<{ onNavigate: (path: string) => void }> = 
     return () => clearInterval(timer);
   }, []);
 
-  const dealProducts = PRODUCTS.filter((p) => p.isLightningDeal);
+  const dealProducts = products.filter((p) => p.isLightningDeal);
 
   if (dealProducts.length === 0) return null;
 
