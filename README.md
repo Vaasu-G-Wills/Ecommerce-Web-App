@@ -1,4 +1,4 @@
-# PrimeTech India — Amazon-Parity Computer & Electronics Storefront 🇮🇳 💻
+# PrimeTech India — Computer & Electronics Storefront 🇮🇳 💻
 
 An ultra-premium, local-first, high-feature-parity e-commerce application modeled after **Amazon India**, designed specifically for **Computer Hardware, Laptops, Custom PC Components, Monitors, Peripherals, and Networking Gear**.
 
